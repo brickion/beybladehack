@@ -1,0 +1,22 @@
+{
+  "name": "beybladehack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brickion/beybladehack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brickion/beybladehack/issues"
+  },
+  "homepage": "https://github.com/brickion/beybladehack#readme",
+  "dependencies": {
+    "svg.js": "^2.6.4"
+  }
+}
