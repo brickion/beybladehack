@@ -1,18 +1,20 @@
 var draw
-
-const grid = 4*4
-const rowSize = 4
-const sqSize = 30
-const gap = 1
+const grid = 5*5
+const rowSize = 5
+const sqSize = 20
+const gap = 0
 const base = sqSize+gap
 const fill = '#111'
-const blank = '#f0f0f0'
-//const code = 1010
-var squares = new Array(25)
+const blank = '#fff'
+const timeInterval = 100
+var flashLoopCount = 1
+
+var squares = new Array(grid)
 var textbox = document.getElementById("codeBox")
 
 generateCube()
 
+// use button to trigger
 textbox.addEventListener("keyup", function(event) {
   event.preventDefault()
   if (event.keyCode === 13) {
@@ -20,23 +22,10 @@ textbox.addEventListener("keyup", function(event) {
   }
 })
 
-//document.getElementById("codeBox").removeAttribute('readonly')
-
 function generateCube() {
-  draw = SVG('drawing').size(300, 300)
+  draw = SVG('drawing').size(sqSize*(rowSize+2), sqSize*(rowSize+2))
 
-  // set up row
-  draw.rect(sqSize, sqSize).move(0,0).attr({ fill: fill })
-  draw.rect(sqSize, sqSize).move(sqSize+gap,0).attr({ fill: fill })
-  draw.rect(sqSize, sqSize).move((sqSize+gap)*2,0).attr({ fill: blank })
-  draw.rect(sqSize, sqSize).move((sqSize+gap)*3,0).attr({ fill: blank })
-  draw.rect(sqSize, sqSize).move((sqSize+gap)*4,0).attr({ fill: blank })
-
-  // set up column
-  draw.rect(sqSize, sqSize).move(0,sqSize+gap).attr({ fill: fill })
-  draw.rect(sqSize, sqSize).move(0,(sqSize+gap)*2).attr({ fill: blank })
-  draw.rect(sqSize, sqSize).move(0,(sqSize+gap)*3).attr({ fill: blank })
-  draw.rect(sqSize, sqSize).move(0,(sqSize+gap)*4).attr({ fill: blank })
+  draw.rect(sqSize*(rowSize+2), sqSize*(rowSize+2)).move(0,0).attr({ fill: fill })
 
   // init grid
   for (var i = 0; i < grid; i++) {
@@ -48,23 +37,14 @@ function generateCube() {
   }
 }
 
-function displayCode() {
-  //var textbox = document.getElementById('codeBox')
+function fetchAndDisplayCode() {
   var code = parseInt(textbox.value)
-  //console.log(code)
-  //check code > verify against squares
-  for (var i = 0; i < grid; i++) {
-    const fillColour = (Math.pow(2, i) == (Math.pow(2, i) & code)) ? fill : blank
-    squares[i].attr({ fill: fillColour })
-  }
+  displayCode(code)
   code++
   textbox.value = code
 }
 
-function displayCode2(code) {
-  //var textbox = document.getElementById('codeBox')
-  //var code = parseInt(textbox.value)
-  //console.log(code)
+function displayCode(code) {
   //check code > verify against squares
   for (var i = 0; i < grid; i++) {
     const fillColour = (Math.pow(2, i) == (Math.pow(2, i) & code)) ? fill : blank
@@ -72,21 +52,17 @@ function displayCode2(code) {
   }
 }
 
-var countLoop=0;
-
-var i = 1;                     //  set your counter to 1
 function reset() {
-  i=1
+  flashLoopCount=1
 }
 
-function tryMany () {
+function tryMany (count) {
    setTimeout(function () {
      var code = parseInt(textbox.value)
-      displayCode2(code++)
+      displayCode(code++)
       textbox.value = code
-      i++;
-      if (i < 50) {
+      if (flashLoopCount++ < 100) {
          tryMany();
       }
-   }, 200)
+   }, timeInterval)
 }
